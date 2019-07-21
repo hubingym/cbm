@@ -29,7 +29,8 @@ fn cmd_init(dir string) {
 fn cmd_cean(dir string) {
     println('--begin clean---')
     folder := '${dir}/${build_dir}'
-    os.rmdir(folder)
+    // os.rmdir(folder)
+    os.system('rm -rf ${folder}')
     println('--end clean---')
 }
 

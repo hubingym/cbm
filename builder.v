@@ -43,7 +43,9 @@ fn (b mut Builder) scan_files() {
             cxxfiles << file
         }
     }
+    print('cfiles: ')
     println(cfiles)
+    print('cxxfiles: ')
     println(cxxfiles)
     b.cfiles = cfiles
     b.cxxfiles = cxxfiles
@@ -88,6 +90,8 @@ fn (b mut Builder) build_files(cflags string, cxxflags string) {
     }
     if b.modified {
         b.ofiles = ofiles
+    } else {
+        println('no files modified, no need to compile')
     }
     if has_cxx {
         b.ld = cxx
@@ -103,6 +107,8 @@ fn (b mut Builder) link_files(name string, ldflags string) {
         cmd := '${b.ld} $ldflags -o $outfile ${ofiles}'
         println(cmd)
         os.system(cmd)
+    } else {
+        println('no files modified, no need to link')
     }
 }
 
@@ -115,5 +121,7 @@ fn (b mut Builder) ar_files(name string) {
         cmd := 'ar rcs -o $outfile ${ofiles}'
         println(cmd)
         os.system(cmd)
+    } else {
+        println('no files modified, no neeed to ar')
     }
 }
