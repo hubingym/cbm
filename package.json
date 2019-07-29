@@ -1,0 +1,20 @@
+{
+  "name": "cbm",
+  "version": "1.0.0",
+  "description": "c/c++ build manager",
+  "main": "index.js",
+  "scripts": {
+    "build": "v -o cbm . && cp cbm C:/bin",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hubingym/cbm.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hubingym/cbm/issues"
+  },
+  "homepage": "https://github.com/hubingym/cbm#readme"
+}

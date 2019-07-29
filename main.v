@@ -2,13 +2,18 @@ module main
 
 import os
 
-fn help() {
+const (
+    cbm_version = '0.1.0'
+)
+
+fn cmd_help() {
     help_text := '
-cbm version 1.0.0
+cbm version $cbm_version
 usage: cbm [options] cmd
 
 Options:
   -h               show help
+  -v               show version
   -d <directory>   code directory, default .
 
 Cmd:
@@ -20,13 +25,17 @@ Cmd:
     println(help_text)
 }
 
+fn cmd_version() {
+    println('cbm version: $cbm_version')
+}
+
 fn cmd_init(dir string) {
     println('--begin init---')
     write_build_json(dir)
     println('--end init---')
 }
 
-fn cmd_cean(dir string) {
+fn cmd_clean(dir string) {
     println('--begin clean---')
     folder := '${dir}/${build_dir}'
     // os.rmdir(folder)
@@ -77,7 +86,12 @@ fn main() {
     mut cmd := ''
     // println(os.args)
     if (os.args.len < 2 || '-h' in os.args) {
-        help()
+        cmd_help()
+        return
+    }
+
+    if (os.args.len < 2 || '-v' in os.args) {
+        cmd_version()
         return
     }
 
@@ -104,7 +118,7 @@ fn main() {
     // println('dir:${dir}, cmd:${cmd}')
     match cmd {
         'init' => cmd_init(dir)
-        'clean' => cmd_cean(dir)
+        'clean' => cmd_clean(dir)
         'build' => cmd_build(dir)
         'run' => cmd_run(dir)
         else => println('not suported cmd: $cmd')

@@ -8,7 +8,7 @@ const (
     cxx = 'g++'
 )
 
-struct Builder {
+struct CBuilder {
     dir string
     outdir string
     outobjsdir string
@@ -20,8 +20,8 @@ mut:
     modified bool
 }
 
-fn new_builder(dir string) Builder {
-    return Builder {
+fn new_builder(dir string) CBuilder {
+    return CBuilder {
         ld: cc
         dir: dir
         outdir: '${dir}/${build_dir}'
@@ -30,7 +30,7 @@ fn new_builder(dir string) Builder {
 }
 
 // 扫描文件
-fn (b mut Builder) scan_files() {
+fn (b mut CBuilder) scan_files() {
     println('--scan_files--')
     mut cfiles := []string
     mut cxxfiles := []string
@@ -52,7 +52,7 @@ fn (b mut Builder) scan_files() {
 }
 
 // 编译.o文件
-fn (b mut Builder) build_files(cflags string, cxxflags string) {
+fn (b mut CBuilder) build_files(cflags string, cxxflags string) {
     if !os.file_exists(b.outobjsdir) {
         os.mkdir(b.outdir)
         os.mkdir(b.outobjsdir)
@@ -63,6 +63,7 @@ fn (b mut Builder) build_files(cflags string, cxxflags string) {
     mut outfile := ''
     mut cmd := ''
     mut has_cxx := false
+    mut ret := 0
     for file in b.cfiles {
         infile = '${b.dir}/${file}'
         outfile = file.replace('.c', '.o')
@@ -72,7 +73,10 @@ fn (b mut Builder) build_files(cflags string, cxxflags string) {
             b.modified = true
             cmd = '$cc $cflags -c -o $outfile $infile'
             println(cmd)
-            os.system(cmd)
+            ret = os.system(cmd)
+            if ret != 0 {
+                exit(1)
+            }
         }
     }
     for file in b.cxxfiles {
@@ -85,7 +89,10 @@ fn (b mut Builder) build_files(cflags string, cxxflags string) {
             b.modified = true
             cmd = '$cxx $cxxflags -c -o $outfile $infile'
             println(cmd)
-            os.system(cmd)
+            ret = os.system(cmd)
+            if ret != 0 {
+                exit(1)
+            }
         }
     }
     if b.modified {
@@ -99,28 +106,34 @@ fn (b mut Builder) build_files(cflags string, cxxflags string) {
 }
 
 // 链接为可执行文件
-fn (b mut Builder) link_files(name string, ldflags string) {
+fn (b mut CBuilder) link_files(name string, ldflags string) {
     println('--link_files--')
     if b.modified {
         outfile := '${b.outdir}/${name}'
         ofiles := b.ofiles.join(' ')
         cmd := '${b.ld} $ldflags -o $outfile ${ofiles}'
         println(cmd)
-        os.system(cmd)
+        ret := os.system(cmd)
+        if ret != 0 {
+            exit(1)
+        }
     } else {
         println('no files modified, no need to link')
     }
 }
 
 // 打包静态库
-fn (b mut Builder) ar_files(name string) {
+fn (b mut CBuilder) ar_files(name string) {
     println('--ar_files--')
     if b.modified {
         outfile := '${b.outdir}/lib${name}.a'
         ofiles := b.ofiles.join(' ')
         cmd := 'ar rcs -o $outfile ${ofiles}'
         println(cmd)
-        os.system(cmd)
+        ret := os.system(cmd)
+        if ret != 0 {
+            exit(1)
+        }
     } else {
         println('no files modified, no neeed to ar')
     }

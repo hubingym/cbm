@@ -40,7 +40,7 @@ fn read_build_json(dir string) ?BuildJson {
         return error('error reading file $path')
     }
     build_json := json.decode(BuildJson, content) or {
-        return error('Failed to decode $json_filename')
+        return error('Failed to decode build.json')
     }
     return build_json
 }
