@@ -111,7 +111,7 @@ fn (b mut CBuilder) link_files(name string, ldflags string) {
     if b.modified {
         outfile := '${b.outdir}/${name}'
         ofiles := b.ofiles.join(' ')
-        cmd := '${b.ld} $ldflags -o $outfile ${ofiles}'
+        cmd := '${b.ld} -o $outfile ${ofiles} $ldflags'
         println(cmd)
         ret := os.system(cmd)
         if ret != 0 {
