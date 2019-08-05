@@ -128,7 +128,7 @@ fn (b mut CBuilder) ar_files(name string) {
     if b.modified {
         outfile := '${b.outdir}/lib${name}.a'
         ofiles := b.ofiles.join(' ')
-        cmd := 'ar rcs -o $outfile ${ofiles}'
+        cmd := 'ar rcs $outfile ${ofiles}'
         println(cmd)
         ret := os.system(cmd)
         if ret != 0 {
