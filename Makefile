@@ -9,3 +9,5 @@ install_win:
 
 clean:
 	rm -f cbm cbm.exe .*.c fns.txt
+
+.PHONY: cbm install install_win clean

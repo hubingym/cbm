@@ -22,6 +22,7 @@ Cmd:
   clean            clean
   build            build
   run              run program
+  install          install program
 '
     println(help_text)
 }
