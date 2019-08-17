@@ -103,7 +103,7 @@ fn main() {
 
     mut fp := flag.new_flag_parser(os.args)
     fp.skip_executable()
-    dir := fp.string_('dir', `d`, os.getwd().replace('\\', '/'), '')
+    mut dir := fp.string_('dir', `d`, os.getwd().replace('\\', '/'), '')
     args := fp.finalize() or {
         panic(err)
     }
@@ -114,6 +114,8 @@ fn main() {
     cmd := args[0]
 
     // println('dir:${dir}, cmd:${cmd}')
+    os.chdir(dir)
+    dir = os.getwd()
     match cmd {
         'init' => cmd_init(dir)
         'clean' => cmd_clean(dir)
