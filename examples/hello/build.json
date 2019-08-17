@@ -1,0 +1,13 @@
+
+{
+  "name": "hello",
+  "desc": "",
+  "version": "1.0.0",
+  "buildtype": "program",
+  "install_dir": "C:/bin",
+  "run_args": "",
+  "cflags": "",
+  "cxxflags": "",
+  "ldflags": "",
+  "win32ldflags": ""
+}

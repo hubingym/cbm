@@ -1,0 +1,13 @@
+
+{
+  "name": "fib",
+  "desc": "",
+  "version": "1.0.0",
+  "buildtype": "lib",
+  "install_dir": "",
+  "run_args": "",
+  "cflags": "",
+  "cxxflags": "",
+  "ldflags": "",
+  "win32ldflags": ""
+}

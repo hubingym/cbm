@@ -7,13 +7,15 @@ cbm [options] cmd
 
 options:   
 -h // 显示帮助   
--d dir // 代码目录  
+-v // 显示版本信息
+-d dir // 代码目录，默认当前目录  
 
 cmd:  
 init // 初始化项目会生成build.json  
 clean  
 build // 构建项目  
 run  // 运行项目  
+install // 安装可执行文件  
 
 
 ## build.json
@@ -21,11 +23,22 @@ run  // 运行项目
 
     {
 		"name": "",
-		"type": "",
+		"desc": "",
+		"version": "1.0.0",
+		"type": "program",
+		"install_dir": "C:/bin",
+		"run_args": "",
 		"cflags": "",
 		"cxxflags": "",
 		"ldflags": "",
+		"win32ldflags": "",
 	}
 
 name: 应用名称,如果是静态库,最终名称为libxx.a  
 type: lib(静态库) or program(可执行程序)  
+install_dir: 安装路径，默认,windows(C:/bin) *nix(/usr/local/bin)  
+run_args: 运行参数  
+cflags: c flags  
+cxxflags: c++ flags  
+ldflags: ld flags  
+win32ldflags: windows ld flags，如果win32ldflags为空，就使用ldflags  

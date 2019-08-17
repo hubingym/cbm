@@ -52,7 +52,7 @@ fn (b mut CBuilder) scan_files() {
 }
 
 // 编译.o文件
-fn (b mut CBuilder) build_files(cflags string, cxxflags string) {
+fn (b mut CBuilder) build_files(name string, cflags string, cxxflags string) {
     if !os.file_exists(b.outobjsdir) {
         os.mkdir(b.outdir)
         os.mkdir(b.outobjsdir)
@@ -84,8 +84,8 @@ fn (b mut CBuilder) build_files(cflags string, cxxflags string) {
         outfile = file.replace('.cc', '.o')
         outfile = '${b.outobjsdir}/${outfile}'
         ofiles << outfile
+        has_cxx = true
         if os.file_last_mod_unix(infile) > os.file_last_mod_unix(outfile) {
-            has_cxx = true
             b.modified = true
             cmd = '$cxx $cxxflags -c -o $outfile $infile'
             println(cmd)
@@ -95,11 +95,19 @@ fn (b mut CBuilder) build_files(cflags string, cxxflags string) {
             }
         }
     }
-    if b.modified {
-        b.ofiles = ofiles
-    } else {
+
+    if !b.modified {
         println('no files modified, no need to compile')
     }
+
+    if !os.file_exists(b.get_binary_path(name)) {
+        b.modified = true
+    }
+
+    if b.modified {
+        b.ofiles = ofiles
+    }
+
     if has_cxx {
         b.ld = cxx
     }
@@ -137,4 +145,12 @@ fn (b mut CBuilder) ar_files(name string) {
     } else {
         println('no files modified, no neeed to ar')
     }
+}
+
+fn (b mut CBuilder) get_binary_path(name string) string {
+    mut binary_file := '${b.outdir}/${name}'
+    if os.user_os() == 'windows' {
+        binary_file = binary_file + '.exe'
+    }
+    return binary_file
 }

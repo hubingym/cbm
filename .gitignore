@@ -9,6 +9,8 @@
 *.exe
 a.out
 cbm
+build/
+fns.txt
 
 # Debug files
 *.dSYM/
