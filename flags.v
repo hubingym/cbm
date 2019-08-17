@@ -26,7 +26,7 @@ fn write_build_json(dir string) {
     name := os.filename(dir)
     path := '$dir/$json_filename'
     mut prefix := '/usr/local/bin'
-    if os.user_os() == 'windows' {
+    if is_windows() {
         prefix = 'C:/bin'
     }
     text := '

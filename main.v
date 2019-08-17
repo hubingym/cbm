@@ -63,7 +63,7 @@ fn cmd_build(dir string) {
     // 链接文件
     if (build_json.buildtype == type_program) {
         mut ldflags := build_json.ldflags
-        if build_json.win32ldflags != '' {
+        if is_windows() && build_json.win32ldflags != '' {
             ldflags = build_json.win32ldflags
         }
         builder.link_files(build_json.name, ldflags)
