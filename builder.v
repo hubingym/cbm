@@ -24,8 +24,8 @@ fn new_builder(dir string) CBuilder {
     return CBuilder {
         ld: cc
         dir: dir
-        outdir: '${dir}/${build_dir}'
-        outobjsdir: '${dir}/${build_dir}/objs'
+        outdir: '${build_dir}'
+        outobjsdir: '${build_dir}/objs'
     }
 }
 
@@ -65,7 +65,7 @@ fn (b mut CBuilder) build_files(name string, cflags string, cxxflags string) {
     mut has_cxx := false
     mut ret := 0
     for file in b.cfiles {
-        infile = '${b.dir}/${file}'
+        infile = '${file}'
         outfile = file.replace('.c', '.o')
         outfile = '${b.outobjsdir}/${outfile}'
         ofiles << outfile
@@ -80,7 +80,7 @@ fn (b mut CBuilder) build_files(name string, cflags string, cxxflags string) {
         }
     }
     for file in b.cxxfiles {
-        infile = '${b.dir}/${file}'
+        infile = '${file}'
         outfile = file.replace('.cc', '.o')
         outfile = '${b.outobjsdir}/${outfile}'
         ofiles << outfile

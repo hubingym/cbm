@@ -1,4 +1,4 @@
-#include "fib.h";
+#include "fib.h"
 
 int fib(int n) {
     if (n <= 0)
