@@ -85,7 +85,7 @@ fn cmd_run(dir string, isInstall bool) {
     if isInstall {
         os.system('cp ${binary_file} ${build_json.install_dir}')
     } else {
-        os.system('${binary_file} ${build_json.run_args}')
+        os.system('$dir/${binary_file} ${build_json.run_args}')
     }
 }
 
