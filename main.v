@@ -4,7 +4,7 @@ import os
 import flag
 
 const (
-    cbm_version = '0.1.0'
+    cbm_version = '0.2.0'
 )
 
 fn cmd_help() {
@@ -19,6 +19,7 @@ Options:
 
 Cmd:
   init             inital build.json
+  init --lib       inital build.json, static library
   clean            clean
   build            build
   run              run program
@@ -31,8 +32,8 @@ fn cmd_version() {
     println('cbm version: $cbm_version')
 }
 
-fn cmd_init(dir string) {
-    write_build_json(dir)
+fn cmd_init(dir string, is_lib bool) {
+    write_build_json(dir, is_lib)
     println('init ok')
 }
 
@@ -71,7 +72,7 @@ fn cmd_build(dir string) {
     // println('--end build---')
 }
 
-fn cmd_run(dir string, isInstall bool) {
+fn cmd_run(dir string, is_install bool) {
     build_json := read_build_json(dir) or {
         println(err)
         return
@@ -82,8 +83,12 @@ fn cmd_run(dir string, isInstall bool) {
     }
     mut b := new_builder(dir)
     binary_file := b.get_binary_path(build_json.name)
-    if isInstall {
-        os.system('cp ${binary_file} ${build_json.install_dir}')
+    mut install_dir := build_json.install_dir
+    if is_windows() {
+        install_dir = build_json.win32install_dir
+    }
+    if is_install {
+        os.system('cp ${binary_file} ${install_dir}')
     } else {
         os.system('$dir/${binary_file} ${build_json.run_args}')
     }
@@ -103,7 +108,8 @@ fn main() {
 
     mut fp := flag.new_flag_parser(os.args)
     fp.skip_executable()
-    mut dir := fp.string_('dir', `d`, os.getwd().replace('\\', '/'), '')
+    mut dir := fp.string_('dir', `d`, getwd_(), '')
+    is_lib := fp.bool('lib', false, '')
     args := fp.finalize() or {
         panic(err)
     }
@@ -115,9 +121,9 @@ fn main() {
 
     // println('dir:${dir}, cmd:${cmd}')
     os.chdir(dir)
-    dir = os.getwd()
+    dir = getwd_()
     match cmd {
-        'init' => cmd_init(dir)
+        'init' => cmd_init(dir, is_lib)
         'clean' => cmd_clean(dir)
         'build' => cmd_build(dir)
         'run' => cmd_run(dir, false)

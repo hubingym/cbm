@@ -149,7 +149,7 @@ fn (b mut CBuilder) ar_files(name string) {
 
 fn (b mut CBuilder) get_binary_path(name string) string {
     mut binary_file := '${b.outdir}/${name}'
-    if os.user_os() == 'windows' {
+    if is_windows() {
         binary_file = binary_file + '.exe'
     }
     return binary_file

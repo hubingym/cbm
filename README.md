@@ -12,6 +12,7 @@ options:
 
 cmd:  
 init // 初始化项目会生成build.json  
+init --lib // 应用类型为静态库  
 clean  
 build // 构建项目  
 run  // 运行项目  
@@ -26,7 +27,8 @@ install // 安装可执行文件
 		"desc": "",
 		"version": "1.0.0",
 		"type": "program",
-		"install_dir": "C:/bin",
+		"install_dir": "/usr/local/bin",
+		"win32install_dir": "C:/bin",
 		"run_args": "",
 		"cflags": "",
 		"cxxflags": "",
@@ -36,7 +38,8 @@ install // 安装可执行文件
 
 name: 应用名称,如果是静态库,最终名称为libxx.a  
 type: lib(静态库) or program(可执行程序)  
-install_dir: 安装路径，默认,windows(C:/bin) *nix(/usr/local/bin)  
+install_dir: *nix安装路径，默认/usr/local/bin  
+win32install_dir: windows安装路径，默认C:/bin  
 run_args: 运行参数  
 cflags: c flags  
 cxxflags: c++ flags  

@@ -15,6 +15,7 @@ struct BuildJson {
     // version string
     buildtype string  // lib or program
     install_dir string
+    win32install_dir string
     run_args string
     cflags string
     cxxflags string
@@ -22,20 +23,25 @@ struct BuildJson {
     win32ldflags string
 }
 
-fn write_build_json(dir string) {
+fn write_build_json(dir string, is_lib bool) {
     name := os.filename(dir)
     path := '$dir/$json_filename'
-    mut prefix := '/usr/local/bin'
-    if is_windows() {
-        prefix = 'C:/bin'
+    mut install_dir := ''
+    mut win32install_dir := ''
+    mut type_ := type_lib
+    if !is_lib {
+        install_dir = '/usr/local/bin'
+        win32install_dir = 'C:/bin'
+        type_ = type_program
     }
     text := '
 {
   "name": "$name",
   "desc": "",
   "version": "1.0.0",
-  "buildtype": "${type_program}",
-  "install_dir": "$prefix",
+  "buildtype": "${type_}",
+  "install_dir": "$install_dir",
+  "win32install_dir": "$win32install_dir",
   "run_args": "",
   "cflags": "",
   "cxxflags": "",

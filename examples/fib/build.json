@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "buildtype": "lib",
   "install_dir": "",
+  "win32install_dir": "",
   "run_args": "",
   "cflags": "",
   "cxxflags": "",
