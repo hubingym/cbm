@@ -41,6 +41,8 @@ fn (b mut CBuilder) scan_files() {
             cfiles << file
         } else if file.ends_with('.cc') {
             cxxfiles << file
+        }  else if file.ends_with('.cpp') {
+            cxxfiles << file
         }
     }
     print('cfiles: ')
@@ -81,7 +83,12 @@ fn (b mut CBuilder) build_files(name string, cflags string, cxxflags string) {
     }
     for file in b.cxxfiles {
         infile = '${file}'
-        outfile = file.replace('.cc', '.o')
+        if file.ends_with('.cc') {
+            outfile = file.replace('.cc', '.o')
+        } else {
+            outfile = file.replace('.cpp', '.o')
+        }
+        
         outfile = '${b.outobjsdir}/${outfile}'
         ofiles << outfile
         has_cxx = true
