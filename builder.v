@@ -69,7 +69,7 @@ fn (b mut CBuilder) build_files(name string, cflags string, cxxflags string) {
         outfile = file.replace('.c', '.o')
         outfile = '${b.outobjsdir}/${outfile}'
         ofiles << outfile
-        if os.file_last_mod_unix(infile) > os.file_last_mod_unix(outfile) {
+        if !os.file_exists(outfile) || os.file_last_mod_unix(infile) > os.file_last_mod_unix(outfile) {
             b.modified = true
             cmd = '$cc $cflags -c -o $outfile $infile'
             println(cmd)
@@ -85,7 +85,7 @@ fn (b mut CBuilder) build_files(name string, cflags string, cxxflags string) {
         outfile = '${b.outobjsdir}/${outfile}'
         ofiles << outfile
         has_cxx = true
-        if os.file_last_mod_unix(infile) > os.file_last_mod_unix(outfile) {
+        if !os.file_exists(outfile) || os.file_last_mod_unix(infile) > os.file_last_mod_unix(outfile) {
             b.modified = true
             cmd = '$cxx $cxxflags -c -o $outfile $infile'
             println(cmd)
