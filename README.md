@@ -7,7 +7,7 @@ cbm [options] cmd
 
 options:   
 -h // 显示帮助   
--v // 显示版本信息
+-v // 显示版本信息  
 -d dir // 代码目录，默认当前目录  
 
 cmd:  
