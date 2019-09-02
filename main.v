@@ -123,11 +123,11 @@ fn main() {
     os.chdir(dir)
     dir = getwd_()
     match cmd {
-        'init' => cmd_init(dir, is_lib)
-        'clean' => cmd_clean(dir)
-        'build' => cmd_build(dir)
-        'run' => cmd_run(dir, false)
-        'install' => cmd_run(dir, true)
-        else => println('not suported cmd: $cmd')
+        'init' => { cmd_init(dir, is_lib) }
+        'clean' => { cmd_clean(dir) }
+        'build' => { cmd_build(dir) }
+        'run' => { cmd_run(dir, false) }
+        'install' => { cmd_run(dir, true) }
+        else => { println('not suported cmd: $cmd') }
     }
 }
