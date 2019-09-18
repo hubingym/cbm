@@ -21,6 +21,7 @@ struct BuildJson {
     cxxflags string
     ldflags string
     win32ldflags string
+    subdirs []string
 }
 
 fn write_build_json(dir string, is_lib bool) {
@@ -46,7 +47,8 @@ fn write_build_json(dir string, is_lib bool) {
   "cflags": "",
   "cxxflags": "",
   "ldflags": "",
-  "win32ldflags": ""
+  "win32ldflags": "",
+  "subdirs": []
 }
 '
     os.write_file(path, text)
@@ -55,10 +57,10 @@ fn write_build_json(dir string, is_lib bool) {
 fn read_build_json(dir string) ?BuildJson {
     path := '$dir/$json_filename'
     content := os.read_file(path) or {
-        return error('error reading file $path')
+        return error('Failed to read build.json, please check build.json exists.')
     }
     build_json := json.decode(BuildJson, content) or {
-        return error('Failed to decode build.json')
+        return error('Failed to decode build.json.')
     }
     return build_json
 }

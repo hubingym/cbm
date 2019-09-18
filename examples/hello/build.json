@@ -10,5 +10,6 @@
   "cflags": "",
   "cxxflags": "",
   "ldflags": "",
-  "win32ldflags": ""
+  "win32ldflags": "",
+  "subdirs": []
 }

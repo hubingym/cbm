@@ -10,6 +10,7 @@ const (
 
 struct CBuilder {
     dir string
+    subdirs []string
     outdir string
     outobjsdir string
 mut:
@@ -20,10 +21,11 @@ mut:
     modified bool
 }
 
-fn new_builder(dir string) CBuilder {
+fn new_builder(dir string, subdirs []string) CBuilder {
     return CBuilder {
         ld: cc
         dir: dir
+        subdirs: subdirs
         outdir: '${build_dir}'
         outobjsdir: '${build_dir}/objs'
     }
@@ -34,8 +36,14 @@ fn (b mut CBuilder) scan_files() {
     println('--scan_files--')
     mut cfiles := []string
     mut cxxfiles := []string
-    folder_contents := os.ls(b.dir)
-    // println(folder_contents)
+    mut folder_contents := []string
+    for dir in b.subdirs {
+        for file_path in os.ls(dir) {
+            folder_contents << '$dir/$file_path'
+        }
+    }
+    folder_contents << os.ls(b.dir)
+    println(folder_contents)
     for file in folder_contents {
         if file.ends_with('.c') {
             cfiles << file
@@ -54,10 +62,14 @@ fn (b mut CBuilder) scan_files() {
 }
 
 // 编译.o文件
-fn (b mut CBuilder) build_files(name string, cflags string, cxxflags string) {
+fn (b mut CBuilder) build_files(name string, cflags string, cxxflags string, buildtype string) {
     if !os.file_exists(b.outobjsdir) {
         os.mkdir(b.outdir)
         os.mkdir(b.outobjsdir)
+        for dir in b.subdirs {
+            println('mkdir -p ${b.outobjsdir}/$dir')
+            os.system('mkdir -p ${b.outobjsdir}/$dir')
+        }
     }
     println('--build_files--')
     mut ofiles := []string
@@ -107,7 +119,11 @@ fn (b mut CBuilder) build_files(name string, cflags string, cxxflags string) {
         println('no files modified, no need to compile')
     }
 
-    if !os.file_exists(b.get_binary_path(name)) {
+    if buildtype == type_program && !os.file_exists(b.get_binary_path(name)) {
+        b.modified = true
+    }
+
+    if buildtype == type_lib && !os.file_exists(b.get_lib_path(name)) {
         b.modified = true
     }
 
@@ -141,7 +157,7 @@ fn (b mut CBuilder) link_files(name string, ldflags string) {
 fn (b mut CBuilder) ar_files(name string) {
     println('--ar_files--')
     if b.modified {
-        outfile := '${b.outdir}/lib${name}.a'
+        outfile := b.get_lib_path(name)
         ofiles := b.ofiles.join(' ')
         cmd := 'ar rcs $outfile ${ofiles}'
         println(cmd)
@@ -154,10 +170,14 @@ fn (b mut CBuilder) ar_files(name string) {
     }
 }
 
-fn (b mut CBuilder) get_binary_path(name string) string {
+fn (b &CBuilder) get_binary_path(name string) string {
     mut binary_file := '${b.outdir}/${name}'
     if is_windows() {
         binary_file = binary_file + '.exe'
     }
     return binary_file
+}
+
+fn (b &CBuilder) get_lib_path(name string) string {
+    return '${b.outdir}/lib${name}.a'
 }

@@ -23,18 +23,19 @@ install // 安装可执行文件
 
 
     {
-		"name": "",
-		"desc": "",
-		"version": "1.0.0",
-		"type": "program",
-		"install_dir": "/usr/local/bin",
-		"win32install_dir": "C:/bin",
-		"run_args": "",
-		"cflags": "",
-		"cxxflags": "",
-		"ldflags": "",
-		"win32ldflags": "",
-	}
+    	"name": "",
+    	"desc": "",
+    	"version": "1.0.0",
+    	"type": "program",
+    	"install_dir": "/usr/local/bin",
+    	"win32install_dir": "C:/bin",
+    	"run_args": "",
+    	"cflags": "",
+    	"cxxflags": "",
+    	"ldflags": "",
+    	"win32ldflags": "",
+    	"subdirs": [],
+    }
 
 name: 应用名称,如果是静态库,最终名称为libxx.a  
 type: lib(静态库) or program(可执行程序)  
@@ -45,3 +46,4 @@ cflags: c flags
 cxxflags: c++ flags  
 ldflags: ld flags  
 win32ldflags: windows ld flags，如果win32ldflags为空，就使用ldflags  
+subdirs: 子目录(字符串数组)，例如["dir1", "dir2", "dir3"]  

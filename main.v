@@ -4,7 +4,7 @@ import os
 import flag
 
 const (
-    cbm_version = '0.2.0'
+    cbm_version = '0.3.0'
 )
 
 fn cmd_help() {
@@ -52,11 +52,11 @@ fn cmd_build(dir string) {
     }
     // print('build json: ')
     // println(build_json)
-    mut builder := new_builder(dir)
+    mut builder := new_builder(dir, build_json.subdirs)
     // 扫描文件
     builder.scan_files()
     // 编译.o文件
-    builder.build_files(build_json.name, build_json.cflags, build_json.cxxflags)
+    builder.build_files(build_json.name, build_json.cflags, build_json.cxxflags, build_json.buildtype)
     // ar文件
     if (build_json.buildtype == type_lib) {
         builder.ar_files(build_json.name)
@@ -81,7 +81,7 @@ fn cmd_run(dir string, is_install bool) {
         println('it\'s not a program!')
         return
     }
-    mut b := new_builder(dir)
+    mut b := new_builder(dir, build_json.subdirs)
     binary_file := b.get_binary_path(build_json.name)
     mut install_dir := build_json.install_dir
     if is_windows() {
