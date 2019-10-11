@@ -1,5 +1,5 @@
 cbm:
-	v -debug -show_c_cmd -o cbm .
+	v -show_c_cmd -o cbm .
 
 install:
 	cp cbm /usr/local/bin
