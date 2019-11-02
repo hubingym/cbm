@@ -37,13 +37,15 @@ fn (b mut CBuilder) scan_files() {
     mut cfiles := []string
     mut cxxfiles := []string
     mut folder_contents := []string
-    for dir in b.subdirs {
-        for file_path in os.ls(dir) {
+    mut dirs := b.subdirs.clone()
+    dirs << b.dir
+    for dir in dirs {
+        files := os.ls(dir) or { panic(err) }
+        for file_path in files {
             folder_contents << '$dir/$file_path'
         }
     }
-    folder_contents << os.ls(b.dir)
-    println(folder_contents)
+    // println(folder_contents)
     for file in folder_contents {
         if file.ends_with('.c') {
             cfiles << file

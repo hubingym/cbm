@@ -4,7 +4,7 @@ import os
 import flag
 
 const (
-    cbm_version = '0.3.0'
+    cbm_version = '0.4.0'
 )
 
 fn cmd_help() {
@@ -121,13 +121,13 @@ fn main() {
 
     // println('dir:${dir}, cmd:${cmd}')
     os.chdir(dir)
-    dir = getwd_()
+    dir = '.'
     match cmd {
-        'init' => { cmd_init(dir, is_lib) }
-        'clean' => { cmd_clean(dir) }
-        'build' => { cmd_build(dir) }
-        'run' => { cmd_run(dir, false) }
-        'install' => { cmd_run(dir, true) }
-        else => { println('not suported cmd: $cmd') }
+        'init' { cmd_init(dir, is_lib) }
+        'clean' { cmd_clean(dir) }
+        'build' { cmd_build(dir) }
+        'run' { cmd_run(dir, false) }
+        'install' { cmd_run(dir, true) }
+        else { println('not suported cmd: $cmd') }
     }
 }
